@@ -1,9 +1,12 @@
 package project;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import project.pages.LoginPage;
 import project.pages.MarketPage;
 
@@ -17,26 +20,29 @@ public class LoginTest {
     public static WebDriver driver;
     public static MarketPage marketPage;
     public static LoginPage loginPage;
+
     @BeforeAll
-    public static void setup() {
-        //определение пути до драйвера и его настройка
-        System.setProperty("webdriver.chrome.driver", ConfProperties.getProperty("chromedriver"));
-        driver = new ChromeDriver();
+    public static void setup2() {
+        WebDriverManager.chromedriver().setup();
+    }
+    @BeforeEach
+    public void setup() {
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--user-data-dir=C:\\Users\\Ana\\AppData\\Local\\Google\\Chrome\\User Data");
+        options.addArguments("--profile-directory=Default");
+        options.addArguments("--remote-allow-origins=*");
+       // options.addArguments("--headless");
+        driver = new ChromeDriver(options);
+
         marketPage = new MarketPage(driver);
         loginPage = new LoginPage(driver);
-        driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        driver.get(ConfProperties.getProperty("marketpage"));
     }
 
     @Test
     public void loginTest(){
-        marketPage.clickLoginBtn();
-        loginPage.inputLogin(ConfProperties.getProperty("testlogin"));
-        loginPage.clickLoginBtn();
-        loginPage.inputPasswd("testpassword");
-        loginPage.clickLoginBtn();
-
-        assertEquals(ConfProperties.getProperty("testmail"), marketPage.checkUserIcon());
+        driver.get(ConfProperties.getProperty("marketpage"));
+        driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        assertEquals("Анастасия Морозова\nanamrzvtest@yandex.ru", marketPage.checkUserIcon());
     }
 }
