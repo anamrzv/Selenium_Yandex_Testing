@@ -1,4 +1,4 @@
-package project;
+package project.tests;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
@@ -8,17 +8,20 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import project.ConfProperties;
 import project.pages.CatalogPage;
 import project.pages.MarketPage;
 
 import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class CatalogTest {
+public class MarketTest {
+
     public static WebDriver driver;
     public static MarketPage marketPage;
-    public static CatalogPage catalogPage;
+    public static CatalogPage loginPage;
 
     @BeforeAll
     public static void setupDrivers() {
@@ -36,7 +39,7 @@ public class CatalogTest {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
 
         marketPage = new MarketPage(driver);
-        catalogPage = new CatalogPage(driver);
+        loginPage = new CatalogPage(driver);
     }
 
     @AfterEach
@@ -45,10 +48,20 @@ public class CatalogTest {
     }
 
     @Test
-    public void testDeliveryDateFilter() {
-        driver.get(ConfProperties.getProperty("catalogpage"));
+    public void loginTest() {
+        driver.get(ConfProperties.getProperty("marketpage"));
         driver.manage().window().maximize();
-        assertEquals("Найдено 208 товаров", catalogPage.filterByDeliveryDate("До 5 дней"));
+        assertEquals("Анастасия Морозова\nanamrzvtest@yandex.ru", marketPage.checkUserInfo());
+        assertTrue(marketPage.isCartEmpty());
+        assertTrue(marketPage.isFavouriteEmpty());
+        assertTrue(marketPage.isOrdersEmpty());
+    }
+
+    @Test
+    public void testNavigationToCatalog() {
+        driver.get(ConfProperties.getProperty("marketpage"));
+        driver.manage().window().maximize();
+        assertEquals("Детские игрушки и игры", marketPage.chooseThemeInCatalog("Игрушки и игры"));
     }
 
 }

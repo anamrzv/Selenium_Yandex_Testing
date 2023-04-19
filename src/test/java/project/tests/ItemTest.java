@@ -1,4 +1,4 @@
-package project;
+package project.tests;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
@@ -8,19 +8,17 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import project.pages.CatalogPage;
-import project.pages.MarketPage;
+import project.ConfProperties;
+import project.pages.ItemPage;
 
 import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class MarketTest {
-
+public class ItemTest {
     public static WebDriver driver;
-    public static MarketPage marketPage;
-    public static CatalogPage loginPage;
+    public static ItemPage itemPage;
 
     @BeforeAll
     public static void setupDrivers() {
@@ -35,10 +33,9 @@ public class MarketTest {
         options.addArguments("--remote-allow-origins=*");
         // options.addArguments("--headless");
         driver = new ChromeDriver(options);
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(6));
 
-        marketPage = new MarketPage(driver);
-        loginPage = new CatalogPage(driver);
+        itemPage = new ItemPage(driver);
     }
 
     @AfterEach
@@ -47,20 +44,18 @@ public class MarketTest {
     }
 
     @Test
-    public void loginTest() {
-        driver.get(ConfProperties.getProperty("marketpage"));
+    public void testAddToFav() {
+        driver.get(ConfProperties.getProperty("itempage"));
         driver.manage().window().maximize();
-        assertEquals("Анастасия Морозова\nanamrzvtest@yandex.ru", marketPage.checkUserInfo());
-        assertTrue(marketPage.isCartEmpty());
-        assertTrue(marketPage.isFavouriteEmpty());
-        assertTrue(marketPage.isOrdersEmpty());
+        itemPage.addToFav();
+        assertEquals("Кукла Barbie Кем быть? Астронавт 29 см, GFX24", itemPage.goToFavAndCheckItem());
     }
 
     @Test
-    public void testNavigationToCatalog() {
-        driver.get(ConfProperties.getProperty("marketpage"));
+    public void testAddToCart() {
+        driver.get(ConfProperties.getProperty("itempage"));
         driver.manage().window().maximize();
-        assertEquals("Детские игрушки и игры", marketPage.chooseThemeInCatalog("Игрушки и игры"));
+        assertTrue(itemPage.addToCart());
+        assertEquals("Кукла Barbie к 60-летию Кем быть? Космонавт GFX24", itemPage.goToCartAndCheckItem());
     }
-
 }
