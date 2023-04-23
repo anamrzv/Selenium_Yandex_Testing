@@ -58,4 +58,27 @@ public class ItemTest {
         assertTrue(itemPage.addToCart());
         assertEquals("Кукла Barbie к 60-летию Кем быть? Космонавт GFX24", itemPage.goToCartAndCheckItem());
     }
+
+    @Test
+    public void testAddMoreOrDeleteCart() {
+        driver.get(ConfProperties.getProperty("itempage"));
+        driver.manage().window().maximize();
+        assertTrue(itemPage.addToCart());
+        itemPage.continueShopping();
+        assertEquals("2", itemPage.addMoreToCart());
+        assertEquals("3", itemPage.addMoreToCart());
+        assertEquals("2", itemPage.deleteFromCart());
+        assertEquals("1", itemPage.deleteFromCart());
+        assertEquals("0", itemPage.deleteFromCart());
+    }
+
+    @Test
+    public void testLikeFeedback() {
+        driver.get(ConfProperties.getProperty("itempage"));
+        driver.manage().window().maximize();
+        assertEquals("Нравится\n2", itemPage.getLikes());
+        itemPage.likeFeedback();
+        assertEquals("Нравится\n3", itemPage.getLikes());
+    }
+
 }

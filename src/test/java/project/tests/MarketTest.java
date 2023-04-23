@@ -64,4 +64,21 @@ public class MarketTest {
         assertEquals("Детские игрушки и игры", marketPage.chooseThemeInCatalog("Игрушки и игры"));
     }
 
+    @Test
+    public void testSearchBar() {
+        driver.get(ConfProperties.getProperty("marketpage"));
+        driver.manage().window().maximize();
+        marketPage.searchByString("Самкат");
+        assertEquals("Самокат", marketPage.chooseThemeInCatalog("Игрушки и игры"));
+    }
+
+    @Test
+    public void testNewLocation(){
+        driver.get(ConfProperties.getProperty("marketpage"));
+        driver.manage().window().maximize();
+        marketPage.clickOnLocation();
+        marketPage.inputNewLocation("Москва");
+        assertEquals("Москва, \nд. 12", marketPage.getLocation());
+    }
+
 }

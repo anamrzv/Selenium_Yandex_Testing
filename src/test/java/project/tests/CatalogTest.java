@@ -55,8 +55,8 @@ public class CatalogTest {
     public void testPriceFilter() {
         driver.get(ConfProperties.getProperty("catalogpage"));
         driver.manage().window().maximize();
-        assertTrue(catalogPage.filterByPriceRange("100000","1200000").matches("^Найдено [1-9]+[0-9]* товар.*$"));
-        assertEquals("Товаров нет", catalogPage.filterByPriceRange("","10"));
+        assertTrue(catalogPage.filterByPriceRange("100000", "1200000").matches("^Найдено [1-9]+[0-9]* товар.*$"));
+        assertEquals("Товаров нет", catalogPage.filterByPriceRange("", "10"));
     }
 
     @Test
@@ -69,7 +69,6 @@ public class CatalogTest {
         catalogPage.sortByPrice();
         assertEquals("Кукла Barbie \"Кем быть?\" 29 см, GFX23 космонавт", catalogPage.returnFirstItemName());
     }
-
 
 
 }

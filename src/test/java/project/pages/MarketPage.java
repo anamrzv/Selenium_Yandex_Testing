@@ -3,8 +3,11 @@ package project.pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+
+import java.time.Duration;
 
 public class MarketPage {
     public WebDriver driver;
@@ -35,6 +38,18 @@ public class MarketPage {
 
     @FindBy(xpath = "//span[text()='Каталог']")
     private WebElement catalog;
+
+    @FindBy(xpath = "//*[contains(text(), 'Искать товары')]/..")
+    private WebElement searchField;
+
+    @FindBy(xpath = "//*[contains(text(), 'Найти')]/..")
+    private WebElement searchButton;
+
+    @FindBy(xpath = "//*[@id='hyperlocation-unified-dialog-anchor']/button")
+    private WebElement location;
+
+    @FindBy(xpath ="//*[@aria-owns='react-autowhatever-address']/div/div/div/div/input")
+    private WebElement locationField;
 
     public String checkUserInfo() {
 //        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
@@ -72,6 +87,30 @@ public class MarketPage {
         driver.findElement(By.xpath("//a[text()='" + theme + "']")).click();
         WebElement header = driver.findElement(By.xpath("//h1[@data-auto='title']"));
         return header.getText();
+    }
+
+    public String searchByString(String description) {
+        searchField.sendKeys(description);
+        searchButton.click();
+        WebElement header = driver.findElement(By.xpath("//h1[@data-auto='title']"));
+        return header.getText();
+    }
+
+    public void clickOnLocation() {
+        location.click();
+    }
+
+    public void inputNewLocation(String newLocation) {
+        driver.findElement(By.xpath("//*[contains(text(), 'Добавить новый адрес')]")).click();
+        locationField.clear();
+        locationField.sendKeys(newLocation);
+        driver.findElement(By.xpath("//*[@id='react-autowhatever-address--item-1']")).click();
+        WebElement here = driver.findElement(By.xpath("//*[contains(text(), 'Привезти сюда')]"));
+        new Actions(driver).click(here).pause(Duration.ofSeconds(2)).perform();
+    }
+
+    public String getLocation() {
+        return location.getText();
     }
 
 }
