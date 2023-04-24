@@ -9,6 +9,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import project.ConfProperties;
+import project.pages.CartPage;
+import project.pages.FavouritesPage;
 import project.pages.ItemPage;
 
 import java.time.Duration;
@@ -19,6 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class ItemTest {
     public static WebDriver driver;
     public static ItemPage itemPage;
+    public static FavouritesPage favPage;
+    public static CartPage cartPage;
 
     @BeforeAll
     public static void setupDrivers() {
@@ -36,6 +40,8 @@ public class ItemTest {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(6));
 
         itemPage = new ItemPage(driver);
+        favPage = new FavouritesPage(driver);
+        cartPage = new CartPage(driver);
     }
 
     @AfterEach
@@ -44,19 +50,27 @@ public class ItemTest {
     }
 
     @Test
-    public void testAddToFav() {
+    public void testAddAndRemoveFromFav() {
         driver.get(ConfProperties.getProperty("itempage"));
         driver.manage().window().maximize();
         itemPage.addToFav();
-        assertEquals("Кукла Barbie Кем быть? Астронавт 29 см, GFX24", itemPage.goToFavAndCheckItem());
+        itemPage.goToFav();
+        assertEquals("Кукла Barbie Кем быть? Астронавт 29 см, GFX24", favPage.getFirstItem());
+        favPage.removeFromFav();
+        driver.navigate().refresh();
+        assertTrue(favPage.isFavouriteEmpty());
     }
 
     @Test
-    public void testAddToCart() {
+    public void testAddAndRemoveToCart() {
         driver.get(ConfProperties.getProperty("itempage"));
         driver.manage().window().maximize();
         assertTrue(itemPage.addToCart());
-        assertEquals("Кукла Barbie к 60-летию Кем быть? Космонавт GFX24", itemPage.goToCartAndCheckItem());
+        itemPage.goToCart();
+        assertTrue(cartPage.checkItem("Кукла Barbie к 60-летию Кем быть? Космонавт GFX24"));
+        cartPage.removeFromCart();
+        driver.navigate().refresh();
+        assertTrue(cartPage.isCartEmpty());
     }
 
     @Test
@@ -76,7 +90,9 @@ public class ItemTest {
     public void testLikeFeedback() {
         driver.get(ConfProperties.getProperty("itempage"));
         driver.manage().window().maximize();
-        assertEquals("Нравится\n2", itemPage.getLikes());
+        assertEquals("Нравится\n3", itemPage.getLikes());
+        itemPage.likeFeedback();
+        assertEquals("Нравится\n4", itemPage.getLikes());
         itemPage.likeFeedback();
         assertEquals("Нравится\n3", itemPage.getLikes());
     }

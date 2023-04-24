@@ -10,7 +10,6 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import project.ConfProperties;
 import project.pages.CatalogPage;
-import project.pages.MarketPage;
 
 import java.time.Duration;
 

@@ -29,6 +29,9 @@ public class ItemPage {
     @FindBy(xpath = "//*[@id='scroll-to-reviews-list']/div[1]/div/div[3]/div[4]/div[2]/div/div[1]/div/button")
     private WebElement likeButton;
 
+    @FindBy(xpath = "//*[@data-baobab-name='favorites']")
+    private WebElement goToFav;
+
     public void addToFav() {
         favButton.click();
     }
@@ -90,18 +93,13 @@ public class ItemPage {
         return "";
     }
 
-    public String goToFavAndCheckItem() {
-        WebElement goToFav = driver.findElement(By.xpath("//*[@data-baobab-name='favorites']"));
+    public void goToFav() {
         goToFav.click();
-        WebElement firstItem = driver.findElement(By.xpath("/html/body/div[1]/div[2]/div[1]/div[1]/section/div/article/div[2]/h3/a/span"));
-        return firstItem.getText();
     }
 
-    public String goToCartAndCheckItem() {
+    public void goToCart() {
         WebElement goToCart = driver.findElement(By.xpath("//div[@data-zone-name='goToCart']/a/span"));
         goToCart.click();
-        WebElement firstItem = driver.findElement(By.xpath("//*[@data-auto='CartOffer']/div/div[3]/div/div[1]"));
-        return firstItem.getText();
     }
 
     public void leaveFeedback() {
@@ -125,7 +123,7 @@ public class ItemPage {
         while (!likeButton.isDisplayed()) {
             js.executeScript("window.scrollBy(0, 1000);");
         }
-        new Actions(driver).click(likeButton).pause(Duration.ofSeconds(2)).perform();
+        new Actions(driver).pause(Duration.ofSeconds(2)).perform();
         return likeButton.getText();
     }
 

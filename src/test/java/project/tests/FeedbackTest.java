@@ -10,7 +10,6 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import project.ConfProperties;
 import project.pages.FeedbackPage;
-import project.pages.ItemPage;
 
 import java.time.Duration;
 
@@ -36,10 +35,10 @@ public class FeedbackTest {
         feedbackPage = new FeedbackPage(driver);
     }
 
-//    @AfterEach
-//    public void tearDown() {
-//        driver.quit();
-//    }
+    @AfterEach
+    public void tearDown() {
+        driver.quit();
+    }
 
     @Test
     public void testAddGoodFeedback() {

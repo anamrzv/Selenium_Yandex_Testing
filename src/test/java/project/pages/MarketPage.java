@@ -33,7 +33,7 @@ public class MarketPage {
     @FindBy(xpath = "//*[contains(@title, 'Избранное')]")
     private WebElement favourite;
 
-    @FindBy(xpath = "//*[contains(@title, 'Заказы')]")
+    @FindBy(xpath = "//*[@data-baobab-name='orders']")
     private WebElement orders;
 
     @FindBy(xpath = "//span[text()='Каталог']")
@@ -61,25 +61,16 @@ public class MarketPage {
         } else return null;
     }
 
-    public boolean isCartEmpty() {
+    public void goToCart() {
         cart.click();
-        if (driver.findElement(By.xpath("//*[contains(text(), 'Сложите в корзину нужные товары')]"))
-                .isDisplayed()) return true;
-        else return false;
     }
 
-    public boolean isFavouriteEmpty() {
+    public void goToFavourites() {
         favourite.click();
-        if (driver.findElement(By.xpath("//*[contains(text(), 'Ещё не готовы к покупке?')]"))
-                .isDisplayed()) return true;
-        else return false;
     }
 
-    public boolean isOrdersEmpty() {
+    public void goToOrders() {
         orders.click();
-        if (driver.findElement(By.xpath("//*[contains(text(), 'Здесь будет храниться история ваших заказов')]"))
-                .isDisplayed()) return true;
-        else return false;
     }
 
     public String chooseThemeInCatalog(String theme) {

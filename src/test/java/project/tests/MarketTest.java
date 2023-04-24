@@ -1,6 +1,7 @@
 package project.tests;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,8 +10,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import project.ConfProperties;
-import project.pages.CatalogPage;
-import project.pages.MarketPage;
+import project.pages.*;
 
 import java.time.Duration;
 
@@ -21,7 +21,10 @@ public class MarketTest {
 
     public static WebDriver driver;
     public static MarketPage marketPage;
-    public static CatalogPage loginPage;
+    public static FavouritesPage favPage;
+    public static OrdersPage ordersPage;
+
+    public static CartPage cartPage;
 
     @BeforeAll
     public static void setupDrivers() {
@@ -39,7 +42,9 @@ public class MarketTest {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
 
         marketPage = new MarketPage(driver);
-        loginPage = new CatalogPage(driver);
+        favPage = new FavouritesPage(driver);
+        ordersPage = new OrdersPage(driver);
+        cartPage = new CartPage(driver);
     }
 
     @AfterEach
@@ -51,10 +56,13 @@ public class MarketTest {
     public void loginTest() {
         driver.get(ConfProperties.getProperty("marketpage"));
         driver.manage().window().maximize();
+        marketPage.goToFavourites();
+        assertTrue(favPage.isFavouriteEmpty());
+        marketPage.goToCart();
+        assertTrue(cartPage.isCartEmpty());
+        marketPage.goToOrders();
+        assertTrue(ordersPage.isOrdersEmpty());
         assertEquals("Анастасия Морозова\nanamrzvtest@yandex.ru", marketPage.checkUserInfo());
-        assertTrue(marketPage.isCartEmpty());
-        assertTrue(marketPage.isFavouriteEmpty());
-        assertTrue(marketPage.isOrdersEmpty());
     }
 
     @Test
