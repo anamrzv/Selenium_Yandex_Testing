@@ -47,6 +47,8 @@ public class ItemTest {
 
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--remote-allow-origins=*");
+        options.addArguments("--user-data-dir=C:\\Users\\Ana\\AppData\\Local\\Google\\Chrome\\User Data");
+        options.addArguments("--profile-directory=Default");
         chromeDriver = new ChromeDriver(options);
 
         FirefoxOptions firefoxOptions = new FirefoxOptions();
@@ -68,7 +70,7 @@ public class ItemTest {
         loginPage.clickLoginBtn();
     }
 
-    @Test
+    @Test //GOOD
     public void testAddAndRemoveFromFav() {
         driverList.forEach(driver -> {
             itemPage = new ItemPage(driver);
@@ -78,10 +80,15 @@ public class ItemTest {
 
             driver.get(ConfProperties.getProperty("itempage2"));
             driver.manage().window().maximize();
-            login();
+            Class<? extends WebDriver> driverClass = driver.getClass();
+            if (driverClass.equals(FirefoxDriver.class)) {
+                login();
+            }
             itemPage.addToFav();
             itemPage.goToFav();
-            assertTrue(favPage.isItemInFav("Barbie игрушка Mattel Barbie Кукла Игра с модой DGY54"));
+            if (driverClass.equals(FirefoxDriver.class)) {
+                assertTrue(favPage.isItemInFav("Кофе в зернах BUSHIDO Red Katana 1 кг"));
+            } else assertTrue(favPage.isItemInFav("Кофе в зернах Bushido Red Katana, 1 кг."));
             favPage.removeFromFav();
             driver.navigate().refresh();
             assertTrue(favPage.isFavouriteEmpty());
@@ -89,7 +96,8 @@ public class ItemTest {
         });
     }
 
-    @Test
+
+    @Test //GOOD
     public void testAddAndRemoveToCart() {
         driverList.forEach(driver -> {
             itemPage = new ItemPage(driver);
@@ -97,12 +105,17 @@ public class ItemTest {
             marketPage = new MarketPage(driver);
             loginPage = new LoginPage(driver);
 
-            driver.get(ConfProperties.getProperty("itempage"));
+            driver.get(ConfProperties.getProperty("itempage2"));
             driver.manage().window().maximize();
-            login();
+            Class<? extends WebDriver> driverClass = driver.getClass();
+            if (driverClass.equals(FirefoxDriver.class)) {
+                login();
+            }
             assertTrue(itemPage.addToCart());
             itemPage.goToCart();
-            assertTrue(cartPage.checkItem("Кукла Barbie к 60-летию Кем быть? Космонавт GFX24"));
+            if (driverClass.equals(FirefoxDriver.class)) {
+                assertTrue(cartPage.checkItem("Кофе в зернах BUSHIDO Red Katana 1 кг"));
+            } else assertTrue(cartPage.checkItem("Кофе в зернах Bushido Red Katana, 1 кг."));
             cartPage.removeFromCart();
             driver.navigate().refresh();
             assertTrue(cartPage.isCartEmpty());
@@ -110,16 +123,19 @@ public class ItemTest {
         });
     }
 
-    @Test
+    @Test //GOOD
     public void testAddMoreOrDeleteCart() {
         driverList.forEach(driver -> {
             itemPage = new ItemPage(driver);
             marketPage = new MarketPage(driver);
             loginPage = new LoginPage(driver);
 
-            driver.get(ConfProperties.getProperty("itempage"));
+            driver.get(ConfProperties.getProperty("itempage2"));
             driver.manage().window().maximize();
-            login();
+            Class<? extends WebDriver> driverClass = driver.getClass();
+            if (driverClass.equals(FirefoxDriver.class)) {
+                login();
+            }
             assertTrue(itemPage.addToCart());
             itemPage.continueShopping();
             assertEquals("2", itemPage.addMoreToCart());
@@ -130,7 +146,7 @@ public class ItemTest {
         });
     }
 
-    @Test
+    @Test //GOOD
     public void testLikeFeedback() {
         driverList.forEach(driver -> {
             itemPage = new ItemPage(driver);
@@ -146,7 +162,7 @@ public class ItemTest {
         });
     }
 
-    @Test
+    @Test //GOOD
     public void testFollowPrice() {
         driverList.forEach(driver -> {
             itemPage = new ItemPage(driver);
@@ -155,13 +171,16 @@ public class ItemTest {
 
             driver.get(ConfProperties.getProperty("itempage"));
             driver.manage().window().maximize();
-            login();
+            Class<? extends WebDriver> driverClass = driver.getClass();
+            if (driverClass.equals(FirefoxDriver.class)) {
+                login();
+            }
             assertTrue(itemPage.followPrice());
             driver.quit();
         });
     }
 
-    @Test
+    @Test //GOOD
     public void testCompare() {
         driverList.forEach(driver -> {
             itemPage = new ItemPage(driver);
@@ -176,7 +195,7 @@ public class ItemTest {
         });
     }
 
-    @Test
+    @Test //GOOD
     public void testMakingOrder() {
         driverList.forEach(driver -> {
             itemPage = new ItemPage(driver);
@@ -184,12 +203,17 @@ public class ItemTest {
             loginPage = new LoginPage(driver);
             cartPage = new CartPage(driver);
 
-            driver.get(ConfProperties.getProperty("itempage"));
+            driver.get(ConfProperties.getProperty("itempage2"));
             driver.manage().window().maximize();
-            login();
+            Class<? extends WebDriver> driverClass = driver.getClass();
+            if (driverClass.equals(FirefoxDriver.class)) {
+                login();
+            }
             assertTrue(itemPage.addToCart());
             itemPage.goToCart();
-            assertTrue(cartPage.checkItem("Кукла Barbie к 60-летию Кем быть? Космонавт GFX24"));
+            if (driverClass.equals(FirefoxDriver.class)) {
+                assertTrue(cartPage.checkItem("Кофе в зернах BUSHIDO Red Katana 1 кг"));
+            } else assertTrue(cartPage.checkItem("Кофе в зернах Bushido Red Katana, 1 кг."));
             cartPage.makeOrder();
             assertTrue(cartPage.checkOrderInfo().matches("Получатель\\sАнастасия Морозова, \\+7911\\d*"));
             driver.quit();

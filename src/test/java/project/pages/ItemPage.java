@@ -28,7 +28,7 @@ public class ItemPage {
     @FindBy(xpath = "//*[@id='scroll-to-reviews-list']/div[1]/div/div[3]/div[4]/div[2]/div/div[1]/div/button")
     private WebElement likeButton;
 
-    @FindBy(xpath = "/html/body/div[1]/div[2]/main/div[3]/div/div/div[3]/div/div/div[3]/a")
+    @FindBy(xpath = "/html/body/div[1]/div[2]/main/div[4]/div/div/div[3]/div/div/div[3]/a")
     private WebElement goToFav;
 
     @FindBy(xpath = "//*[@data-baobab-name='comparison']")
@@ -44,7 +44,7 @@ public class ItemPage {
     public void goToFav() {
         Class<? extends WebDriver> driverClass = driver.getClass();
         if (driverClass.equals(ChromeDriver.class)) {
-            WebElement button = driver.findElement(By.xpath("/html/body/div[1]/div[2]/main/div[3]/div/div/div[3]/div/div/div[3]/a"));
+            WebElement button = driver.findElement(By.xpath("/html/body/div[1]/div[2]/main/div[4]/div/div/div[3]/div/div/div[3]/a"));
             button.click();
         } else goToFav.click();
     }
@@ -53,7 +53,7 @@ public class ItemPage {
         Class<? extends WebDriver> driverClass = driver.getClass();
         WebElement cartButton;
         if (driverClass.equals(ChromeDriver.class)) {
-            cartButton = driver.findElement(By.xpath("//*[@id='cardAddButton']/div[1]/div/div/div/div/div[4]/div[4]/div[1]/div[1]/button"));
+            cartButton = driver.findElement(By.xpath("//*[@id=\"cardAddButton\"]/div[1]/div/div/div/div/div[4]/div[4]/div[1]/div[1]/button"));
             cartButton.click();
             return driver.findElement(By.xpath("//h2[text()='Товар успешно добавлен в корзину']")).isDisplayed();
         } else if (driverClass.equals(FirefoxDriver.class)) {
@@ -121,7 +121,7 @@ public class ItemPage {
 
     public void goToCart() {
         WebElement goToCart = driver.findElement(By.xpath("//div[@data-zone-name='goToCart']/a/span"));
-        goToCart.click();
+        new Actions(driver).pause(Duration.ofSeconds(2)).click(goToCart).pause(Duration.ofSeconds(5)).perform();
     }
 
     public void leaveFeedback() {
