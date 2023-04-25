@@ -1,7 +1,6 @@
 package project.tests;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,8 +22,8 @@ public class MarketTest {
     public static MarketPage marketPage;
     public static FavouritesPage favPage;
     public static OrdersPage ordersPage;
-
     public static CartPage cartPage;
+    public static LoginPage loginPage;
 
     @BeforeAll
     public static void setupDrivers() {
@@ -37,7 +36,7 @@ public class MarketTest {
         options.addArguments("--user-data-dir=C:\\Users\\Ana\\AppData\\Local\\Google\\Chrome\\User Data");
         options.addArguments("--profile-directory=Default");
         options.addArguments("--remote-allow-origins=*");
-        // options.addArguments("--headless");
+        //options.addArguments("--headless");
         driver = new ChromeDriver(options);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
 
@@ -45,6 +44,7 @@ public class MarketTest {
         favPage = new FavouritesPage(driver);
         ordersPage = new OrdersPage(driver);
         cartPage = new CartPage(driver);
+        loginPage = new LoginPage(driver);
     }
 
     @AfterEach

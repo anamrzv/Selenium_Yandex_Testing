@@ -32,6 +32,12 @@ public class ItemPage {
     @FindBy(xpath = "//*[@data-baobab-name='favorites']")
     private WebElement goToFav;
 
+    @FindBy(xpath = "//*[@data-baobab-name='comparison']")
+    private WebElement compare;
+
+    @FindBy(xpath = "//*[@data-baobab-name='priceSubscribe']")
+    private WebElement followPrice;
+
     public void addToFav() {
         favButton.click();
     }
@@ -127,4 +133,18 @@ public class ItemPage {
         return likeButton.getText();
     }
 
+    public boolean followPrice() {
+        followPrice.click();
+        if (driver.findElement(By.xpath("//*[contains(text(), 'Оставьте свой адрес — как только цена на товар снизится, вы сразу об этом узнаете')]"))
+                .isDisplayed()) return true;
+        else return false;
+    }
+
+    public boolean addToCompare() {
+        compare.click();
+        driver.findElement(By.xpath("/html/body/div[1]/div[2]/main/div[4]/div/div/div[3]/div/div/div[3]/a")).click();
+        if (driver.findElement(By.xpath("//*[contains(text(), 'Кукла Barbie \"Кем быть?\" 29 см, GFX23')]"))
+                .isDisplayed()) return true;
+        else return false;
+    }
 }

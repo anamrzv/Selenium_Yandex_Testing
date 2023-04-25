@@ -97,4 +97,29 @@ public class ItemTest {
         assertEquals("Нравится\n3", itemPage.getLikes());
     }
 
+    @Test
+    public void testFollowPrice() {
+        driver.get(ConfProperties.getProperty("itempage"));
+        driver.manage().window().maximize();
+        assertTrue(itemPage.followPrice());
+    }
+
+    @Test
+    public void testCompare(){
+        driver.get(ConfProperties.getProperty("itempage"));
+        driver.manage().window().maximize();
+        assertTrue(itemPage.addToCompare());
+    }
+
+    @Test
+    public void testMakingOrder() {
+        driver.get(ConfProperties.getProperty("itempage"));
+        driver.manage().window().maximize();
+        assertTrue(itemPage.addToCart());
+        itemPage.goToCart();
+        assertTrue(cartPage.checkItem("Кукла Barbie к 60-летию Кем быть? Космонавт GFX24"));
+        cartPage.makeOrder();
+        assertTrue(cartPage.checkOrderInfo().matches("Получатель\\sАнастасия Морозова, \\+7911\\d*"));
+    }
+
 }

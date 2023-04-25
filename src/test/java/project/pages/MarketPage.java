@@ -104,4 +104,12 @@ public class MarketPage {
         return location.getText();
     }
 
+    public void clickLoginBtn() {
+        loginBtn.click();
+    }
+
+    public String checkUserIcon() {
+        if (userIcon != null && userMail != null) return userMail.getText();
+        else return null;
+    }
 }

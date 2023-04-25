@@ -15,6 +15,9 @@ public class CartPage {
     @FindBy(xpath = "/html/body/div[1]/div[2]/div/main/div[4]/div/div[2]/div/div/div/div/div/div/div[2]/div/div/div/div/div/div/div/div/div[3]/div[2]/div/div[2]/button[2]")
     private WebElement deleteFinallyButton;
 
+    @FindBy(xpath = "//*[@data-baobab-name='checkoutButton']")
+    private WebElement goToCheckout;
+
     public CartPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
         this.driver = driver;
@@ -26,8 +29,8 @@ public class CartPage {
         else return false;
     }
 
-    public boolean checkItem(String name){
-        if (driver.findElement(By.xpath("//*[contains(text(), '"+name+"')]"))
+    public boolean checkItem(String name) {
+        if (driver.findElement(By.xpath("//*[contains(text(), '" + name + "')]"))
                 .isDisplayed()) return true;
         else return false;
     }
@@ -35,5 +38,13 @@ public class CartPage {
     public void removeFromCart() {
         deleteButton.click();
         deleteFinallyButton.click();
+    }
+
+    public void makeOrder() {
+        goToCheckout.click();
+    }
+
+    public String checkOrderInfo() {
+        return driver.findElement(By.xpath("/html/body/div[1]/div[2]/div/div[4]/div/div/div/div[1]/div/div/div/div/div[2]/div/div[1]/div[4]/div/div/section/div[2]/ul/li/div/div/div/div[1]/div[2]/div[2]/div[2]/div/button")).getText();
     }
 }
