@@ -6,6 +6,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import project.ConfProperties;
 
 import java.time.Duration;
@@ -20,7 +22,7 @@ public class MarketPage {
 
     @FindBy(xpath = "//*[contains(text(), 'Войти')]/..")
     private WebElement loginBtn;
-    @FindBy(xpath = "//*[contains(@src, '//avatars.mds.yandex.net/get-yapic/0/0-0/islands-retina-middle')]/..")
+    @FindBy(xpath = "/html/body/div[1]/header/div/div/div/noindex[2]/nav/ul/li[5]/div/div/div/div[1]/div/button/div/img")
     private WebElement userIcon;
     @FindBy(xpath = "//*[contains(@class, '_3ckxI _3L43M')]/..")
     private WebElement userMail;
@@ -53,10 +55,10 @@ public class MarketPage {
     private WebElement locationField;
 
     public String checkUserInfo() {
-//        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-//        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(@src, '//avatars.mds.yandex.net/get-yapic/0/0-0/islands-retina-middle')]/..")));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[1]/header/div/div/div/noindex[2]/nav/ul/li[5]/div/div/div/div[1]/div/button/div/img")));
         if (userIcon != null) {
-            userIcon.click();
+            new Actions(driver).pause(Duration.ofSeconds(2)).click(userIcon).pause(Duration.ofSeconds(1)).perform();
             if (userMail != null) return userMail.getText();
             else return null;
         } else return null;
