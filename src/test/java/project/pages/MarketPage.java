@@ -6,6 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import project.ConfProperties;
 
 import java.time.Duration;
 
@@ -108,8 +109,4 @@ public class MarketPage {
         loginBtn.click();
     }
 
-    public String checkUserIcon() {
-        if (userIcon != null && userMail != null) return userMail.getText();
-        else return null;
-    }
 }

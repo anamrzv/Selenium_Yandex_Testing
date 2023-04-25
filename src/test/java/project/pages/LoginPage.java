@@ -22,9 +22,6 @@ public class LoginPage {
     @FindBy(xpath = "//*[contains(@id, 'passp-field-passwd')]")
     private WebElement passwdField;
 
-//    @FindBy(xpath = "//*[contains(text(), 'Не сейчас')]/..")
-//    private WebElement notNowBtn;
-
     public void inputLogin(String login) {
         loginField.sendKeys(login);
     }

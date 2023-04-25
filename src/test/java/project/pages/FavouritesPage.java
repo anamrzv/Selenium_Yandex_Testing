@@ -9,9 +9,6 @@ import org.openqa.selenium.support.PageFactory;
 public class FavouritesPage {
     public WebDriver driver;
 
-    @FindBy(xpath = "/html/body/div[1]/div[2]/div[1]/div[1]/section/div/article/div[2]/h3/a/span")
-    private WebElement firstItem;
-
     @FindBy(xpath = "/html/body/div[1]/div[2]/div[1]/div[1]/section/div/article[1]/div[4]/div")
     private WebElement firstItemHeart;
 
@@ -26,8 +23,10 @@ public class FavouritesPage {
         else return false;
     }
 
-    public String getFirstItem(){
-        return firstItem.getText();
+    public boolean isItemInFav(String item){
+        if (driver.findElement(By.xpath("//*[contains(text(), '" + item + "')]"))
+                .isDisplayed()) return true;
+        else return false;
     }
 
     public void removeFromFav() {

@@ -3,8 +3,13 @@ package project.pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 public class CartPage {
     public WebDriver driver;
@@ -36,12 +41,14 @@ public class CartPage {
     }
 
     public void removeFromCart() {
-        deleteButton.click();
-        deleteFinallyButton.click();
+        new Actions(driver).pause(Duration.ofSeconds(2)).click(deleteButton).pause(Duration.ofSeconds(2)).perform();
+        new Actions(driver).pause(Duration.ofSeconds(2)).click(deleteFinallyButton).pause(Duration.ofSeconds(2)).perform();
     }
 
     public void makeOrder() {
-        goToCheckout.click();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[1]/div[2]/div/main/div[4]/div/div[2]/div/div/div/div/div/div/div[3]/div/div/div/div[3]/div/div[1]/div/div/div/section/div[2]/div/div/div/span/div/button")));
+        new Actions(driver).pause(Duration.ofSeconds(2)).click(goToCheckout).pause(Duration.ofSeconds(1)).perform();
     }
 
     public String checkOrderInfo() {

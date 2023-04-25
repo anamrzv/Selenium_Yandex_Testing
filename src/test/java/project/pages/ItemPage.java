@@ -1,14 +1,13 @@
 package project.pages;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
@@ -20,7 +19,7 @@ public class ItemPage {
         this.driver = driver;
     }
 
-    @FindBy(xpath = "//button[@data-auto='wishlist-button']")
+    @FindBy(xpath = "//div[@data-baobab-name='wishlist']/button")
     private WebElement favButton;
 
     @FindBy(xpath = "//*[contains(text(), 'Оставить отзыв')]/..")
@@ -29,7 +28,7 @@ public class ItemPage {
     @FindBy(xpath = "//*[@id='scroll-to-reviews-list']/div[1]/div/div[3]/div[4]/div[2]/div/div[1]/div/button")
     private WebElement likeButton;
 
-    @FindBy(xpath = "//*[@data-baobab-name='favorites']")
+    @FindBy(xpath = "/html/body/div[1]/div[2]/main/div[3]/div/div/div[3]/div/div/div[3]/a")
     private WebElement goToFav;
 
     @FindBy(xpath = "//*[@data-baobab-name='comparison']")
@@ -39,7 +38,15 @@ public class ItemPage {
     private WebElement followPrice;
 
     public void addToFav() {
-        favButton.click();
+        new Actions(driver).pause(Duration.ofSeconds(2)).click(favButton).pause(Duration.ofSeconds(2)).perform();
+    }
+
+    public void goToFav() {
+        Class<? extends WebDriver> driverClass = driver.getClass();
+        if (driverClass.equals(ChromeDriver.class)) {
+            WebElement button = driver.findElement(By.xpath("/html/body/div[1]/div[2]/main/div[3]/div/div/div[3]/div/div/div[3]/a"));
+            button.click();
+        } else goToFav.click();
     }
 
     public boolean addToCart() {
@@ -50,16 +57,28 @@ public class ItemPage {
             cartButton.click();
             return driver.findElement(By.xpath("//h2[text()='Товар успешно добавлен в корзину']")).isDisplayed();
         } else if (driverClass.equals(FirefoxDriver.class)) {
-            cartButton = driver.findElement(By.xpath("//*[@id='cardAddButton']/div[1]/div/div/div/div/div[4]/div[4]/div/button"));
-            cartButton.click();
-            return driver.findElement(By.xpath("//h2[text()='Товар успешно добавлен в корзину']")).isDisplayed();
+            try {
+                WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+                wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[1]/div[2]/main/div[5]/div/div[2]/section/div[1]/div/div/div/div/div[4]/div[4]/div[1]/div[1]/button")));
+                cartButton = driver.findElement(By.xpath("/html/body/div[1]/div[2]/main/div[5]/div/div[2]/section/div[1]/div/div/div/div/div[4]/div[4]/div[1]/div[1]/button"));
+                new Actions(driver).pause(Duration.ofSeconds(2)).click(cartButton).pause(Duration.ofSeconds(2)).perform();
+                return driver.findElement(By.xpath("//h2[text()='Товар успешно добавлен в корзину']")).isDisplayed();
+            } catch (TimeoutException e) {
+                WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+                wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[1]/div[2]/main/div[5]/div/div[2]/section/div[1]/div/div/div/div/div[4]/div[4]/div/button")));
+                cartButton = driver.findElement(By.xpath("/html/body/div[1]/div[2]/main/div[5]/div/div[2]/section/div[1]/div/div/div/div/div[4]/div[4]/div/button"));
+                new Actions(driver).pause(Duration.ofSeconds(2)).click(cartButton).pause(Duration.ofSeconds(2)).perform();
+                return driver.findElement(By.xpath("//h2[text()='Товар успешно добавлен в корзину']")).isDisplayed();
+            }
         }
         return false;
     }
 
     public void continueShopping() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@aria-label='Закрыть']")));
         WebElement goToCart = driver.findElement(By.xpath("//button[@aria-label='Закрыть']"));
-        goToCart.click();
+        new Actions(driver).pause(Duration.ofSeconds(2)).click(goToCart).pause(Duration.ofSeconds(2)).perform();
     }
 
     public String addMoreToCart() {
@@ -71,15 +90,14 @@ public class ItemPage {
             WebElement amount = driver.findElement(By.xpath("//*[@id='cardAddButton']/div[1]/div/div/div/div/div[4]/div[4]/div[1]/div[1]/div/a"));
             return amount.getText();
         } else if (driverClass.equals(FirefoxDriver.class)) {
-            moreButton = driver.findElement(By.xpath("//*[@id='cardAddButton']/div[1]/div/div/div/div/div[4]/div[4]/div[1]/div/div[2]/button/span"));
-            moreButton.click();
-            WebElement amount = driver.findElement(By.xpath("//*[@id='cardAddButton']/div[1]/div/div/div/div/div[4]/div[4]/div[1]/div/a"));
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='cardAddButton']/div[1]/div/div/div/div/div[4]/div[4]/div[1]/div[1]/div/div[2]/button")));
+            moreButton = driver.findElement(By.xpath("//*[@id='cardAddButton']/div[1]/div/div/div/div/div[4]/div[4]/div[1]/div[1]/div/div[2]/button"));
+            new Actions(driver).pause(Duration.ofSeconds(2)).click(moreButton).pause(Duration.ofSeconds(2)).perform();
+            WebElement amount = driver.findElement(By.xpath("//*[@id='cardAddButton']/div[1]/div/div/div/div/div[4]/div[4]/div[1]/div[1]/div/a"));
             return amount.getText();
         }
         return "";
-        //WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-        //wait.until(ExpectedConditions.elementToBeClickable(more));
-        //new Actions(driver).pause(Duration.ofSeconds(2)).moveToElement(more).click(more).perform();
     }
 
     public String deleteFromCart() {
@@ -91,16 +109,14 @@ public class ItemPage {
             WebElement amount = driver.findElement(By.xpath("//*[@id='cardAddButton']/div[1]/div/div/div/div/div[4]/div[4]/div[1]/div[1]/div/a"));
             return amount.getText();
         } else if (driverClass.equals(FirefoxDriver.class)) {
-            lessButton = driver.findElement(By.xpath("//*[@id='cardAddButton']/div[1]/div/div/div/div/div[4]/div[4]/div[1]/div/div[1]/button/span"));
-            lessButton.click();
-            WebElement amount = driver.findElement(By.xpath("//*[@id='cardAddButton']/div[1]/div/div/div/div/div[4]/div[4]/div[1]/div/a"));
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='cardAddButton']/div[1]/div/div/div/div/div[4]/div[4]/div[1]/div[1]/div/div[1]/button")));
+            lessButton = driver.findElement(By.xpath("//*[@id='cardAddButton']/div[1]/div/div/div/div/div[4]/div[4]/div[1]/div[1]/div/div[1]/button"));
+            new Actions(driver).pause(Duration.ofSeconds(2)).click(lessButton).pause(Duration.ofSeconds(2)).perform();
+            WebElement amount = driver.findElement(By.xpath("//*[@id='cardAddButton']/div[1]/div/div/div/div/div[4]/div[4]/div[1]/div[1]/div/a"));
             return amount.getText();
         }
         return "";
-    }
-
-    public void goToFav() {
-        goToFav.click();
     }
 
     public void goToCart() {
@@ -134,17 +150,19 @@ public class ItemPage {
     }
 
     public boolean followPrice() {
-        followPrice.click();
+        new Actions(driver).pause(Duration.ofSeconds(2)).click(followPrice).pause(Duration.ofSeconds(1)).perform();
         if (driver.findElement(By.xpath("//*[contains(text(), 'Оставьте свой адрес — как только цена на товар снизится, вы сразу об этом узнаете')]"))
                 .isDisplayed()) return true;
         else return false;
     }
 
-    public boolean addToCompare() {
-        compare.click();
+    public void addToCompare() {
+        new Actions(driver).pause(Duration.ofSeconds(2)).click(compare).pause(Duration.ofSeconds(1)).perform();
+    }
+
+    public void goToCompare() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[1]/div[2]/main/div[4]/div/div/div[3]/div/div/div[3]/a")));
         driver.findElement(By.xpath("/html/body/div[1]/div[2]/main/div[4]/div/div/div[3]/div/div/div[3]/a")).click();
-        if (driver.findElement(By.xpath("//*[contains(text(), 'Кукла Barbie \"Кем быть?\" 29 см, GFX23')]"))
-                .isDisplayed()) return true;
-        else return false;
     }
 }
