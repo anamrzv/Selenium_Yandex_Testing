@@ -42,7 +42,7 @@ public class MarketPage {
     @FindBy(xpath = "//span[text()='Каталог']")
     private WebElement catalog;
 
-    @FindBy(xpath = "//*[contains(text(), 'Искать товары')]/..")
+    @FindBy(xpath = "/html/body/div[1]/header/div/div/div/div/div/div/div/form/div/div/div/div[2]/div/input")
     private WebElement searchField;
 
     @FindBy(xpath = "//*[contains(text(), 'Найти')]/..")
@@ -77,8 +77,13 @@ public class MarketPage {
     }
 
     public String chooseThemeInCatalog(String theme) {
-        catalog.click();
+        new Actions(driver).pause(Duration.ofSeconds(2)).click(catalog).pause(Duration.ofSeconds(2)).perform();
         driver.findElement(By.xpath("//a[text()='" + theme + "']")).click();
+        WebElement header = driver.findElement(By.xpath("//h1[@data-auto='title']"));
+        return header.getText();
+    }
+
+    public String getHeader(){
         WebElement header = driver.findElement(By.xpath("//h1[@data-auto='title']"));
         return header.getText();
     }
@@ -91,12 +96,14 @@ public class MarketPage {
     }
 
     public void clickOnLocation() {
-        location.click();
+        new Actions(driver).pause(Duration.ofSeconds(2)).click(location).pause(Duration.ofSeconds(2)).perform();
     }
 
     public void inputNewLocation(String newLocation) {
         driver.findElement(By.xpath("//*[contains(text(), 'Добавить новый адрес')]")).click();
+        new Actions(driver).pause(Duration.ofSeconds(2));
         locationField.clear();
+        new Actions(driver).pause(Duration.ofSeconds(2));
         locationField.sendKeys(newLocation);
         driver.findElement(By.xpath("//*[@id='react-autowhatever-address--item-1']")).click();
         WebElement here = driver.findElement(By.xpath("//*[contains(text(), 'Привезти сюда')]"));
@@ -104,6 +111,7 @@ public class MarketPage {
     }
 
     public String getLocation() {
+        new Actions(driver).pause(Duration.ofSeconds(3)).perform();
         return location.getText();
     }
 

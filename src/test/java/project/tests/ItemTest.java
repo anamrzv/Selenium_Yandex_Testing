@@ -58,6 +58,7 @@ public class ItemTest {
 
         chromeDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(6));
         firefoxDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
+
         driverList.add(chromeDriver);
         driverList.add(firefoxDriver);
     }
